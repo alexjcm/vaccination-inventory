@@ -1,16 +1,18 @@
 package com.superapp.demo.service;
 
-import com.superapp.demo.model.Employee;
-import com.superapp.demo.model.Vaccine;
 import com.superapp.demo.model.Vaccine;
 import com.superapp.demo.repository.VaccineRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ *
+ * @author alexjcm
+ */
 @Service
 public class VaccineService {
 

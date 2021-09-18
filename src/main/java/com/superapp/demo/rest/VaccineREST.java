@@ -1,6 +1,5 @@
 package com.superapp.demo.rest;
 
-import com.superapp.demo.model.Vaccine;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/vaccines")
 public class VaccineREST {
@@ -33,7 +31,7 @@ public class VaccineREST {
     @PostMapping
     private ResponseEntity<Vaccine> createVaccine(@RequestBody Vaccine vaccine) {
         try {
-            Vaccine vaccineSaved = vaccineService.save(vaccine);  
+            Vaccine vaccineSaved = vaccineService.save(vaccine);
             return ResponseEntity.ok(vaccineSaved);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

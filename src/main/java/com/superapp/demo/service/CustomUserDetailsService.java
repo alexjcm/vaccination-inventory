@@ -11,30 +11,34 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.superapp.demo.model.Employee;
-import com.superapp.demo.repository.EmployeeRepository;
+import com.superapp.demo.model.User;
+import com.superapp.demo.repository.UserRepository;
 
+/**
+ * 
+ * @author alexjcm
+ */
 //@Service
 @Service("userDetailsService")
-public class EmployeeDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Employee employee = employeeRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
         // se puede cambiar a username en lugar del email
-        if (employee == null) {
+        if (user == null) {
             throw new UsernameNotFoundException("Email " + email + " not found");
         }
-        return new org.springframework.security.core.userdetails.User(employee.getEmail(), employee.getPassword(),
-                getGrantedAuthority(employee));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
+                getGrantedAuthority(user));
     }
 
-    private Collection<GrantedAuthority> getGrantedAuthority(Employee employee) {
+    private Collection<GrantedAuthority> getGrantedAuthority(User user) {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        if (employee.getRole().getName().equalsIgnoreCase("admin")) {
+        if (user.getRole().getName().equalsIgnoreCase("admin")) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));

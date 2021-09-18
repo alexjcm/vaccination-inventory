@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import com.superapp.demo.model.Role;
 import com.superapp.demo.repository.RoleRepository;
 
-
+/**
+ * 
+ * @author alexjcm
+ */
 @Service
 public class RoleService {
 

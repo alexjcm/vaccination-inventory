@@ -13,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 
-
 /**
  *
  * @author alexjcm
@@ -29,7 +28,7 @@ public class Role implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(targetEntity = Employee.class, mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Employee> employees;
+    @OneToMany(targetEntity = User.class, mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<User> users;
 
 }

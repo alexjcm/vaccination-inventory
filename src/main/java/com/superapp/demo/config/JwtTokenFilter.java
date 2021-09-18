@@ -18,6 +18,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
 
+/**
+ *
+ * @author alexjcm
+ */
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private static Logger log = LoggerFactory.getLogger(JwtTokenFilter.class);

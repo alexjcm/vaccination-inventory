@@ -1,5 +1,9 @@
 package com.superapp.demo.config;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.io.Serializable;
 import java.util.Base64;
 import java.util.Date;
@@ -16,10 +20,10 @@ import org.springframework.stereotype.Component;
 
 import com.superapp.demo.model.Role;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-
+/**
+ * 
+ * @author alexjcm
+ */
 @Component
 public class JwtTokenProvider implements Serializable {
 

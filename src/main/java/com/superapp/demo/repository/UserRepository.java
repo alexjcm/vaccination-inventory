@@ -1,11 +1,11 @@
 package com.superapp.demo.repository;
 
-import com.superapp.demo.model.Employee;
+import com.superapp.demo.model.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 
 /**
  * Persistence layer, which will act as a database repository. A Repository is
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Repository;
  * @author alexjcm
  */
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("FROM Employee WHERE email=:email")
-    Employee findByEmail(@Param("email") String email);
+    @Query("FROM User WHERE email=:email")
+    User findByEmail(@Param("email") String email);
 
-    /*@Query("SELECT u FROM Employee u WHERE u.username = :username")
-    public Employee getUserByUsername(@Param("username") String username);*/
+    /*@Query("SELECT u FROM User u WHERE u.username = :username")
+    public User getUserByUsername(@Param("username") String username);*/
 }

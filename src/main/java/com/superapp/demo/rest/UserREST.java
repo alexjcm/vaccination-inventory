@@ -2,10 +2,10 @@ package com.superapp.demo.rest;
 
 import com.superapp.demo.util.ConstantUtils;
 import com.superapp.demo.config.JwtTokenProvider;
-import com.superapp.demo.model.Employee;
-import com.superapp.demo.service.EmployeeService;
+import com.superapp.demo.model.User;
+import com.superapp.demo.service.UserService;
 import com.superapp.demo.service.RoleService;
-import java.net.URI;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -36,11 +36,11 @@ import org.springframework.security.authentication.AuthenticationManager;
  * @author alexjcm
  */
 @RestController
-@RequestMapping("/employees")
-public class EmployeeREST {
+@RequestMapping("/users")
+public class UserREST {
 
     @Autowired
-    private EmployeeService employeeService;
+    private UserService userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -51,65 +51,65 @@ public class EmployeeREST {
     @Autowired
     private RoleService roleService;
 
-    private static final Logger logger = Logger.getLogger(EmployeeREST.class.getName());
+    private static final Logger logger = Logger.getLogger(UserREST.class.getName());
 
     @GetMapping
-    private ResponseEntity<List<Employee>> getAllEmployees() {
-        return ResponseEntity.ok(employeeService.findAll());
+    private ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     //---NEW ADD-----
     @GetMapping("/{id}")
-    private ResponseEntity<List<Employee>> getAllEmployeesByVaccine(@PathVariable("id") Long idVaccine) {
-        return ResponseEntity.ok(employeeService.findAllByVaccine(idVaccine));
+    private ResponseEntity<List<User>> getAllUsersByVaccine(@PathVariable("id") Long idVaccine) {
+        return ResponseEntity.ok(userService.findAllByVaccine(idVaccine));
     }
     //---------------
 
     @PostMapping
-    private ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+    private ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            Employee employeeSaved = employeeService.save(employee);
-            //return ResponseEntity.created(new URI("/employees/" + employeeSaved.getId())).body(employeeSaved);
-            return ResponseEntity.ok(employeeSaved);
+            User userSaved = userService.save(user);
+            //return ResponseEntity.created(new URI("/users/" + userSaved.getId())).body(userSaved);
+            return ResponseEntity.ok(userSaved);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
     @PutMapping
-    private ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee) {
-        Optional<Employee> optionalEmployee = employeeService.findById(employee.getId());
-        if (optionalEmployee.isPresent()) {
-            Employee updateEmployee = optionalEmployee.get();
-            updateEmployee.setIdentCard(employee.getIdentCard());
-            updateEmployee.setFirstName(employee.getFirstName());
-            updateEmployee.setLastName(employee.getLastName());
-            updateEmployee.setEmail(employee.getEmail());
-            employeeService.save(updateEmployee);
-            return ResponseEntity.ok(updateEmployee);
+    private ResponseEntity<User> updateUser(@RequestBody User user) {
+        Optional<User> optionalUser = userService.findById(user.getId());
+        if (optionalUser.isPresent()) {
+            User updateUser = optionalUser.get();
+            updateUser.setIdentCard(user.getIdentCard());
+            updateUser.setFirstName(user.getFirstName());
+            updateUser.setLastName(user.getLastName());
+            updateUser.setEmail(user.getEmail());
+            userService.save(updateUser);
+            return ResponseEntity.ok(updateUser);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    private ResponseEntity<Boolean> deleteEmployee(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(employeeService.deleteById(id));
+    private ResponseEntity<Boolean> deleteUser(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(userService.deleteById(id));
     }
 
     /////////--------------LOGIN ----------
     @PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> authenticate(@RequestBody Employee employee) {
+    public ResponseEntity<String> authenticate(@RequestBody User user) {
         JSONObject jsonObject = new JSONObject();
         try {
             Authentication authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(employee.getEmail(), employee.getPassword()));
+                    .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
             if (authentication.isAuthenticated()) {
-                String email = employee.getEmail();
+                String email = user.getEmail();
                 jsonObject.put("name", authentication.getName());
                 jsonObject.put("authorities", authentication.getAuthorities());
-                //jsonObject.put("token", tokenProvider.createToken(email, employeeRepository.findByEmail(email).getRole()));
-                jsonObject.put("token", tokenProvider.createToken(email, employeeService.findByEmail(email).getRole()));
+                //jsonObject.put("token", tokenProvider.createToken(email, userRepository.findByEmail(email).getRole()));
+                jsonObject.put("token", tokenProvider.createToken(email, userService.findByEmail(email).getRole()));
                 return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
             }
         } catch (JSONException e) {
@@ -124,15 +124,15 @@ public class EmployeeREST {
     }
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> register(@RequestBody Employee employee) {
+    public ResponseEntity<String> register(@RequestBody User user) {
         JSONObject jsonObject = new JSONObject();
         try {
-            employee.setPassword(new BCryptPasswordEncoder().encode(employee.getPassword()));
-            //employee.setRole(roleRepository.findByName(ConstantUtils.USER.toString()));
-            employee.setRole(roleService.findByName(ConstantUtils.USER.toString()));
-            //Employee savedEmployee = employeeRepository.saveAndFlush(employee);
-            Employee savedEmployee = employeeService.saveOrUpdate(employee);
-            jsonObject.put("message", savedEmployee.getUsername() + " saved succesfully");
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            //user.setRole(roleRepository.findByName(ConstantUtils.USER.toString()));
+            user.setRole(roleService.findByName(ConstantUtils.USER.toString()));
+            //User savedUser = userRepository.saveAndFlush(user);
+            User savedUser = userService.saveOrUpdate(user);
+            jsonObject.put("message", savedUser.getUsername() + " saved succesfully");
             return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
         } catch (JSONException e) {
             try {

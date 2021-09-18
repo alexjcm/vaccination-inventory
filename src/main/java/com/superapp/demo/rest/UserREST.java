@@ -1,7 +1,7 @@
 package com.superapp.demo.rest;
 
 import com.superapp.demo.util.ConstantUtils;
-import com.superapp.demo.config.JwtTokenProvider;
+import com.superapp.demo.model.Role;
 import com.superapp.demo.model.User;
 import com.superapp.demo.service.UserService;
 import com.superapp.demo.service.RoleService;
@@ -25,10 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
 
 /**
  * Is a RestController which has request mapping methods for RESTful requests
@@ -42,12 +39,9 @@ public class UserREST {
     @Autowired
     private UserService userService;
 
-    @Autowired
+    /* @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtTokenProvider tokenProvider;
-
+     */
     @Autowired
     private RoleService roleService;
 
@@ -64,17 +58,6 @@ public class UserREST {
         return ResponseEntity.ok(userService.findAllByVaccine(idVaccine));
     }
     //---------------
-
-    @PostMapping
-    private ResponseEntity<User> createUser(@RequestBody User user) {
-        try {
-            User userSaved = userService.save(user);
-            //return ResponseEntity.created(new URI("/users/" + userSaved.getId())).body(userSaved);
-            return ResponseEntity.ok(userSaved);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
 
     @PutMapping
     private ResponseEntity<User> updateUser(@RequestBody User user) {
@@ -97,19 +80,55 @@ public class UserREST {
         return ResponseEntity.ok(userService.deleteById(id));
     }
 
-    /////////--------------LOGIN ----------
+    /////////--------------LOGIN ----------   
     @PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> authenticate(@RequestBody User user) {
+        JSONObject jsonObject = new JSONObject();
+        // try {
+        Role auxRol = null;
+        for (Role rol : user.getRoles()) {
+            if (rol.getName().equalsIgnoreCase("admin")) {
+                auxRol = rol;
+                break;
+            }
+            auxRol = rol;
+        }
+        String email = user.getEmail();
+        //jsonObject.put("token", tokenProvider.createToken(email, auxRol));
+        return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
+
+        /* } catch (JSONException e) {
+            try {
+                jsonObject.put("exception", e.getMessage());
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+            return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.UNAUTHORIZED);
+        }
+        return null;*/
+    }
+
+    /*
+     @PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> authenticate(@RequestBody User user) {
         JSONObject jsonObject = new JSONObject();
         try {
             Authentication authentication = authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-            if (authentication.isAuthenticated()) {
+           
+           if (authentication.isAuthenticated()) {
+                Role auxRol = null;
+                for (Role rol : user.getRoles()) {
+                    if (rol.getName().equalsIgnoreCase("admin")) {
+                        auxRol = rol;
+                        break;
+                    }
+                    auxRol = rol;
+                }
                 String email = user.getEmail();
                 jsonObject.put("name", authentication.getName());
                 jsonObject.put("authorities", authentication.getAuthorities());
-                //jsonObject.put("token", tokenProvider.createToken(email, userRepository.findByEmail(email).getRole()));
-                jsonObject.put("token", tokenProvider.createToken(email, userService.findByEmail(email).getRole()));
+                //jsonObject.put("token", tokenProvider.createToken(email, auxRol));
                 return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
             }
         } catch (JSONException e) {
@@ -122,17 +141,26 @@ public class UserREST {
         }
         return null;
     }
+     */
+    @PostMapping
+    private ResponseEntity<User> createUser(@RequestBody User user) {
+        try {
+            User userSaved = userService.save(user);
+            //return ResponseEntity.created(new URI("/users/" + userSaved.getId())).body(userSaved);
+            return ResponseEntity.ok(userSaved);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> register(@RequestBody User user) {
         JSONObject jsonObject = new JSONObject();
         try {
             user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            //user.setRole(roleRepository.findByName(ConstantUtils.USER.toString()));
-            user.setRole(roleService.findByName(ConstantUtils.USER.toString()));
-            //User savedUser = userRepository.saveAndFlush(user);
-            User savedUser = userService.saveOrUpdate(user);
-            jsonObject.put("message", savedUser.getUsername() + " saved succesfully");
+            //user.setRole(roleService.findByName(ConstantUtils.USER.toString()));
+            Boolean savedUser = userService.registerUser(user);
+            jsonObject.put("message", user.getFirstName() + " saved is " + savedUser);
             return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
         } catch (JSONException e) {
             try {

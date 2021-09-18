@@ -8,10 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinTable;
 import javax.validation.constraints.Size;
 
 import java.io.Serializable;
@@ -21,7 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * 
+ *
  * @author alexjcm
  */
 @Entity
@@ -63,12 +66,20 @@ public class User implements Serializable {
     // actualizable solo por el empleado
     //private String vaccineType;
     @ManyToOne
-    @JoinColumn(name = "id_vaccine")
+    @JoinColumn(name = "vaccine_id")
     private Vaccine vacinne;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "role_id")
-    private Role role;
+    private Role role;*/
+    //JoinTable nos sirve para definir la estructura de la tabla intermedia que
+    //contendrá la relación entre usuarios y roles.
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "rel_roles_usuarios",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
 
     /*@PrePersist
     private void setUUID() {

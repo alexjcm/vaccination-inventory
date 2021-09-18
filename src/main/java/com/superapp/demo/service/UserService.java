@@ -1,5 +1,6 @@
 package com.superapp.demo.service;
 
+import com.superapp.demo.model.Role;
 import com.superapp.demo.model.User;
 import com.superapp.demo.repository.UserRepository;
 
@@ -7,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,6 +78,30 @@ public class UserService {
 
     public User saveOrUpdate(User user) {
         return userRepository.saveAndFlush(user);
+    }
+
+    //Registra el usuario y  genera un usuario y contraseña para el usuario junto con su rol
+    public boolean registerUser(User user) {
+        if (user.getIdentCard() == null || user.getEmail() == null || user.getLastName() == null || user.getFirstName() == null) {
+            return false;
+        } else {
+            // if (verifyData(user)) {
+            try {
+                user.setPassword("1234");
+                user.setUsername(user.getEmail());
+                Set<Role> roles = new HashSet<Role>();
+                Role rol = new Role();
+                rol.setName("user");
+                user.setRoles(roles);          
+                userRepository.saveAndFlush(user);
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
+            //  } else {
+            //      return false;
+            //  }
+        }
     }
 
     public User findByEmail(String email) {

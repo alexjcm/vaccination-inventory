@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  db:
+    build: .
+    container_name: dev-postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - DB_NAME_SIGNATURE=${DB_NAME_SIGNATURE}
+      - DB_USER_SIGNATURE=${DB_USER_SIGNATURE}
+      - DB_PASS_SIGNATURE=${DB_PASS_SIGNATURE}
+    volumes:
+      - ${HOME}/postgres-data-login/:/var/lib/postgresql/data
+

@@ -23,7 +23,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Size(min = 10, max = 10)
+    //@Size(min = 10, max = 10)
     private Integer identCard;
     private String firstName;
     private String lastName;

@@ -1,11 +1,13 @@
 # Employee vaccination inventory
 
+Backend for keeping track of employee vaccination status inventory.
+
 ## Prerequisites
 
 - Java 8
 - Spring Boot 2.5.4
-- Swagger Open API 3
-- Postgres 11.x running in a Docker container
+- Swagger-OpenAPI 3
+- Postgres 11 running in a Docker container
 - Maven 3.6.3
 
 ## Installation
@@ -24,7 +26,7 @@ Then, compile and run the application.
 
 ### Execute shell command inside container
 
-Execute shell command inside container to initialize some sample records in the database
+Execute shell command inside container to initialize some sample records in the database:
 
 `docker exec -it dev-postgres bash`
 
@@ -45,15 +47,16 @@ To test the application use the following administrator username and password:
 
 - Swagger UI endpoint: http://localhost:8080/swagger-ui/index.html
 - All Swagger Resources(groups): http://localhost:8080/swagger-resources
-- Metadatos endpoint: http://localhost:8080/v3/api-docs
+- Metadata endpoint: http://localhost:8080/v3/api-docs
 
-## Getting Started - Spring Boot
+
+
+## More resources about Spring Boot
 
 ### Reference Documentation
 
 For further reference, please consider the following sections:
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
 * [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.5.4/maven-plugin/reference/html/)
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/2.5.4/reference/htmlsingle/#using-boot-devtools)
 * [Spring Web](https://docs.spring.io/spring-boot/docs/2.5.4/reference/htmlsingle/#boot-features-developing-web-applications)

@@ -37,7 +37,7 @@ public class UserRest {
     @GetMapping(value = "/users")
     public ResponseEntity<List<User>> getAllUsers(@RequestHeader(value = "Authorization") String token) {
         if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.getUsers());
+            return ResponseEntity.ok(userDao.getAllUsers());
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();/////////
     }
@@ -64,7 +64,7 @@ public class UserRest {
     @DeleteMapping(value = "/users/{id}")
     public ResponseEntity<Boolean> deleteUser(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
         if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.deleteUser(id));
+            return ResponseEntity.ok(userDao.deleteUserById(id));
         }
         return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);/////////
     }

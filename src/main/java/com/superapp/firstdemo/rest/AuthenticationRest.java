@@ -40,7 +40,7 @@ public class AuthenticationRest {
         JSONObject jsonObject = new JSONObject();
         try {
             User userSaved = userDao.authenticate(user).get(0);
-            String token = jwtToken.create(userSaved.getId().toString(), userSaved.getUsername());
+            String token = jwtToken.createToken(userSaved.getId().toString(), userSaved.getUsername());
             jsonObject.put("user_id", userSaved.getId());
             jsonObject.put("role", userSaved.getRole().getName());
             jsonObject.put("token", token);

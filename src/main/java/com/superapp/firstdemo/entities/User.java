@@ -24,23 +24,20 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Size(min = 10, max = 10)
-    private Integer identCard; // cedula
-    private String firstName; //nombres
-    private String lastName; //apellidos
-    private String email; //correo
+    private Integer identCard;
+    private String firstName;
+    private String lastName;
+    private String email;
     private String username;
-    private String password; //clave
-    private Date dateOfBirth; //fecha_nacimiento
-    private String homeAddress; //direccion
-    private Integer cellPhoneNumber; //celular
-    private Boolean isVaccinated; //estado_vacuna
-    //@Column(name="vaccine_id")
-    //private Integer vaccine_id;
-    private Date dateOfVaccinated; //fecha_vacuna
-    private Integer numberOfDoses; //dosis
-    //@Column(name="role_id")
-    //private Integer role_id;
-    private Boolean status; //estado
+    private String password;
+    private Date dateOfBirth;
+    private String homeAddress;
+    private Integer cellPhoneNumber;
+    private Boolean status;
+    private Boolean isVaccinated;
+    private Date dateOfVaccinated;
+    private Integer numberOfDoses;
+
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;

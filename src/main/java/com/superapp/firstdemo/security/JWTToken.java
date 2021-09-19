@@ -1,13 +1,12 @@
 package com.superapp.firstdemo.security;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -42,18 +41,6 @@ public class JWTToken {
         return builder.compact();
     }
 
-    /**
-     * Method to validate and read the JWT
-     */
-    public String getValue(String jwt) {
-        Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(secretKey))
-                .parseClaimsJws(jwt).getBody();
-        return claims.getSubject();
-    }
-
-    /**
-     * Method to validate and read the JWT
-     */
     public String verifyToken(String jwt) {
         Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(secretKey))
                 .parseClaimsJws(jwt).getBody();

@@ -1,8 +1,8 @@
 package com.superapp.firstdemo.dao;
 
-import com.superapp.firstdemo.entities.Vaccine;
-
 import java.util.List;
+
+import com.superapp.firstdemo.model.Vaccine;
 
 public interface VaccineDao {
 

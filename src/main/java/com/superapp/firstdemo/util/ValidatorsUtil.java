@@ -79,7 +79,6 @@ public class ValidatorsUtil {
      * @return
      */
     public static boolean namesAreValid(String name) {
-        //return strAlp.matches("[a-zA-Z]+");
         String regex = "[a-zA-Z]+";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(name);

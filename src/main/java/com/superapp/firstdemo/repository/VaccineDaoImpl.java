@@ -1,14 +1,14 @@
 package com.superapp.firstdemo.repository;
 
-import com.superapp.firstdemo.dao.VaccineDao;
-import com.superapp.firstdemo.entities.Vaccine;
+import java.util.List;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
+
+import com.superapp.firstdemo.dao.VaccineDao;
+import com.superapp.firstdemo.model.Vaccine;
 
 @Repository
 @Transactional

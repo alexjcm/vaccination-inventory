@@ -1,9 +1,12 @@
 package com.superapp.firstdemo.dao;
 
-import com.superapp.firstdemo.entities.User;
-
 import java.util.List;
 
+import com.superapp.firstdemo.model.User;
+
+/**
+ *
+ */
 public interface UserDao {
 
     List<User> getAllUsers();
@@ -11,6 +14,8 @@ public interface UserDao {
     boolean deleteUserById(Long id);
 
     User getUserById(Long id);
+
+    User getUserByUsername(String username);
 
     boolean updateUser(User user);
 
@@ -25,4 +30,10 @@ public interface UserDao {
     List<User> authenticate(User user);
 
     boolean updateUserByEmployee(User user);
+
+    ///add
+    Boolean usernameIsAvailable(String username);
+
+    Boolean emailIsAvailable(String email);
+
 }

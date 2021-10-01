@@ -6,9 +6,12 @@ Backend for keeping track of employee vaccination status inventory.
 
 - Java 8
 - Spring Boot 2.5.4
-- Swagger-OpenAPI 3
 - Postgres 11 running in a Docker container
 - Maven 3.6.3
+
+
+- Spring Boot OAuth2 Resource Server with JWT
+- Swagger UI (Swagger-OpenAPI 3) with Authentication
 
 ## Installation
 
@@ -22,7 +25,7 @@ Stop and remove networks and containers for services defined in the Compose file
 
 `docker-compose down -v --remove-orphans`
 
-Then, compile and run the application.
+*Then, compile and run the application.*
 
 ### Execute shell command inside container
 
@@ -31,6 +34,11 @@ Execute shell command inside container to initialize some sample records in the 
 `docker exec -it dev-postgres bash`
 
 `psql -U user_test -d db_test -a -f sample.sql`
+
+### Run application
+
+- Use `mvn clean install` in the project root directory to build the project.
+- Run the main class, `com.suprerapp.firstdemo.SuperappApplication` to start the application.
 
 ## Test the application
 

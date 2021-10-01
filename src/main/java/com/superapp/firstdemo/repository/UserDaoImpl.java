@@ -1,21 +1,25 @@
 package com.superapp.firstdemo.repository;
 
-import com.superapp.firstdemo.dao.UserDao;
-import com.superapp.firstdemo.entities.Role;
-import com.superapp.firstdemo.entities.User;
-import com.superapp.firstdemo.util.PasswordUtil;
-import com.superapp.firstdemo.util.ValidatorsUtil;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
+
+import com.superapp.firstdemo.dao.RoleDao;
+import com.superapp.firstdemo.model.RoleName;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import com.superapp.firstdemo.dao.UserDao;
+import com.superapp.firstdemo.model.Role;
+import com.superapp.firstdemo.model.User;
+import com.superapp.firstdemo.util.ValidatorsUtil;
 
 @Repository
 @Transactional
@@ -24,10 +28,21 @@ public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private RoleDao roleDao;
+
+    // TODO: Intentar el final para poder quitar el constructor
+    private final PasswordEncoder passwordEncoder;
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
+
+    public UserDaoImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public List<User> getAllUsers() {
+        // In Hibernate the queries are worked with the names of the classes,
+        // not with the names of the DB tables.
         String query = "From User where status=true";
         return entityManager.createQuery(query).getResultList();
     }
@@ -36,6 +51,19 @@ public class UserDaoImpl implements UserDao {
     public User getUserById(Long id) {
         try {
             User user = entityManager.find(User.class, id);
+            return user;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        String query = "From User where username=:username";
+        try {
+            User user = (User) entityManager.createQuery(query)
+                    .setParameter("username", username)
+                    .getResultList().get(0);
             return user;
         } catch (Exception e) {
             return null;
@@ -64,7 +92,7 @@ public class UserDaoImpl implements UserDao {
                     .setParameter("username", user.getUsername())
                     .getResultList();
             if (!resultQuery.isEmpty()) {
-                isReady = resultQuery.get(0).getPassword().equals(PasswordUtil.digestPassword(user.getPassword()));
+                isReady = passwordEncoder.matches(user.getPassword(), resultQuery.get(0).getPassword());
                 logger.info("===> isReady: " + isReady);
             }
         } catch (Exception e) {
@@ -74,28 +102,6 @@ public class UserDaoImpl implements UserDao {
             return resultQuery;
         }
         return null;
-    }
-
-    /**
-     * Update a user by validating that the required data is valid.
-     *
-     * @param user
-     * @return
-     */
-    @Override
-    public boolean updateUser(User user) {
-        if (user.getIdentCard() == null || user.getEmail() == null || user.getLastName() == null || user.getFirstName() == null) {
-            return false;
-        }
-        if (verifyDataFormat(user)) {
-            try {
-                entityManager.merge(user);
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-        return false;
     }
 
     public boolean verifyDataFormat(User user) {
@@ -117,16 +123,41 @@ public class UserDaoImpl implements UserDao {
             return false;
         }
         if (verifyDataFormat(user)) {
-            user.setUsername(user.getEmail()); // username is the email
-            user.setPassword(PasswordUtil.digestPassword(user.getIdentCard().toString())); // identCard is password
+            user.setUsername(user.getEmail()); // default username is the email
+            user.setPassword(passwordEncoder.encode(user.getIdentCard().toString())); //default password is the identCard
             user.setStatus(true);
             user.setIsVaccinated(false); // default: false
-            Role role = new Role();
-            role.setId(1); // role: user
-            user.setRole(role);
+
+            List<Role> roles = new ArrayList<>();
+            //roles.add(roleDao.findByName(RoleName.ROLE_ADMIN));
+            roles.add(roleDao.findByName(RoleName.ROLE_USER));
+            user.setRoles(roles);
+
             try {
-                logger.info("===> " + user.getFirstName());
                 entityManager.persist(user);
+                logger.info("===> " + user.getFirstName());
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Update a user by validating that the required data is valid.
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public boolean updateUser(User user) {
+        if (user.getIdentCard() == null || user.getEmail() == null || user.getLastName() == null || user.getFirstName() == null) {
+            return false;
+        }
+        if (verifyDataFormat(user)) {
+            try {
+                entityManager.merge(user);
                 return true;
             } catch (Exception e) {
                 return false;
@@ -200,5 +231,34 @@ public class UserDaoImpl implements UserDao {
             }
         }
         return false;
+    }
+
+    ////////// ADD
+    @Override
+    public Boolean usernameIsAvailable(String username) {
+        String query = "From User where username=:username";
+        try {
+            Boolean isAvailable = entityManager.createQuery(query)
+                    .setParameter("username", username)
+                    .getResultList().isEmpty();
+            logger.info("isAvailable ===> " + isAvailable);
+            return isAvailable;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean emailIsAvailable(String email) {
+        String query = "From User where email=:email";
+        try {
+            Boolean isAvailable = entityManager.createQuery(query)
+                    .setParameter("email", email)
+                    .getResultList().isEmpty();
+            logger.info("Email isAvailable ===> " + isAvailable);
+            return isAvailable;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

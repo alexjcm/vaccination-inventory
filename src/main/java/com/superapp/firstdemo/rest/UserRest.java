@@ -1,119 +1,79 @@
 package com.superapp.firstdemo.rest;
 
-import com.superapp.firstdemo.dao.UserDao;
-import com.superapp.firstdemo.security.JWTToken;
-import com.superapp.firstdemo.entities.User;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestHeader;
-
 import java.util.List;
 import java.util.Map;
 
-@RestController
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.http.ResponseEntity;
+//import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+import com.superapp.firstdemo.model.User;
+
+/**
+ * The User API is defined by an interface with corresponding spring annotations.
+ */
 @RequestMapping("api")
 @Api(tags = "Users Rest", description = "User management")
-public class UserRest {
+public interface UserRest {
 
-    @Autowired
-    private UserDao userDao;
+    @Operation(summary = "A protected endpoint which returns the user details of the requesting user.")
+    @GetMapping(value = "/me")
+        //@PreAuthorize("hasRole('USER')")
+    UserDetails getUser(Authentication authentication);
 
-    @Autowired
-    private JWTToken jwtToken;
-
-    @ApiOperation(value = "Allows to obtain all the users")
+    ///////////
+    @Operation(summary = "Allows to obtain all the users")
     @GetMapping(value = "/users")
-    public ResponseEntity<List<User>> getAllUsers(@RequestHeader(value = "Authorization") String token) {
-        if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.getAllUsers());
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();/////////
-    }
+    //@PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasAuthority('USER')")
+    ResponseEntity<List<User>> getAllUsers();
 
-    @ApiOperation(value = "Allows to obtain a user by its id")
+    @Operation(summary = "Allows to obtain all the users2")
+    @GetMapping(value = "/users2")
+    //@PreAuthorize("hasRole('ROLE_USER')")
+    //@PreAuthorize("hasAuthority('ROLE_USER')")
+    ResponseEntity<List<User>> getAllUsers2();
+    //////////////
+
+    @Operation(summary = "Allows to obtain a user by its id")
     @PostMapping(value = "/users/{id}")
-    public ResponseEntity<User> getUserById(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
-        if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.getUserById(id));
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();/////////
-    }
+    ResponseEntity<User> getUserById(@Parameter(description = "Id del usuario to be searched") @PathVariable Long id);
 
-    @ApiOperation(value = "Register a new user")
+    @Operation(summary = "Register a new user")
     @PostMapping(value = "/users")
-    public ResponseEntity<Boolean> registerUser(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
-        if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.registerUser(user));
-        }
-        return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);/////////
-    }
+        //@PreAuthorize("hasRole('ADMIN')")
+    ResponseEntity<Boolean> registerUser(@Valid @RequestBody User user);
 
-    @ApiOperation(value = "Allows you to delete a user by their id")
-    @DeleteMapping(value = "/users/{id}")
-    public ResponseEntity<Boolean> deleteUser(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
-        if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.deleteUserById(id));
-        }
-        return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);/////////
-    }
-
-    @ApiOperation(value = "Modify a user by its respective id")
+    @Operation(summary = "Modify a user by its respective id")
     @PutMapping(value = "/users/{id}")
-    public ResponseEntity<Boolean> updateUser(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
-        if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.updateUser(user));
-        }
-        return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);/////////
-    }
+        //@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    ResponseEntity<Boolean> updateUser(@Valid @RequestBody User user);
 
-    @ApiOperation(value = "Allows you to update vaccination data from the employee role.")
+    @Operation(summary = "Allows you to delete a user by their id")
+    @DeleteMapping(value = "/users/{id}")
+    ResponseEntity<Boolean> deleteUser(@PathVariable Long id);
+
+    @Operation(summary = "Allows you to update vaccination data from the employee role.")
     @PutMapping(value = "/user_by_employee/{id}")
-    public ResponseEntity<Boolean> updateUserByEmployeeRole(@RequestHeader(value = "Authorization") String token, @RequestBody User user) {
-        if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.updateUserByEmployee(user));
-        }
-        return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);
-    }
+    ResponseEntity<Boolean> updateUserByEmployeeRole(@RequestBody User user);
 
-    @ApiOperation(value = "Gets all users by vaccine type")
+    @Operation(summary = "Gets all users by vaccine type")
     @GetMapping(value = "/users_by_vaccine_type/{id}")
-    public ResponseEntity<List<User>> getUsersByVaccine(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
-        if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.getUsersByVaccine(id));
-        }
-        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-    }
+    ResponseEntity<List<User>> getUsersByVaccine(@PathVariable Long id);
 
-    @ApiOperation(value = "Gets all the users according to their vaccination status.")
+    @Operation(summary = "Gets all the users according to their vaccination status.")
     @GetMapping(value = "/users_is_vaccinated/{status}")
-    public ResponseEntity<List<User>> getUsersByVaccineStatus(@RequestHeader(value = "Authorization") String token, @PathVariable Boolean status) {
-        if (jwtToken.verifyToken(token) != null) {
-            return ResponseEntity.ok(userDao.getUsersByVaccineStatus(status));
-        }
-        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-    }
+    ResponseEntity<List<User>> getUsersByVaccineStatus(@PathVariable Boolean status);
 
-    @ApiOperation(value = "Allows to obtain all users by vaccination date range.",
-            notes = "The start and end dates to be sent should be in a format similar to this YYYY-mm-dd, for example: 2021-09-01s")
+    @Operation(summary = "Allows to obtain all users by vaccination date range.",
+            description = "The start and end dates to be sent should be in a format similar to this YYYY-mm-dd, for example: 2021-09-01s")
     @GetMapping(value = "/users_date_range/{startDate}/{endDate}")
-    public ResponseEntity<List<User>> getUsersByDateRange(@RequestHeader(value = "Authorization") String token, @PathVariable Map<String, String> pathVarsMap) {
-        if (jwtToken.verifyToken(token) != null) {
-            String start = pathVarsMap.get("startDate");
-            String end = pathVarsMap.get("endDate");
-            return ResponseEntity.ok(userDao.getUsersByDateRange(start, end));
-        }
-        return new ResponseEntity(null, HttpStatus.UNAUTHORIZED);
-    }
+    ResponseEntity<List<User>> getUsersByDateRange(@PathVariable Map<String, String> pathVarsMap);
 }

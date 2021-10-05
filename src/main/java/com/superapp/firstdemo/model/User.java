@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
@@ -22,7 +23,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
         allowGetters = true
 )
 @Data
-//@Table(name = "usuario")
 @Table(name = "usuario", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"}),
         @UniqueConstraint(columnNames = {"email"})})
 public class User implements Serializable {
@@ -35,8 +35,10 @@ public class User implements Serializable {
     @NotNull
     private Integer identCard;
     @NotBlank
+    @Size(max = 64)
     private String firstName;
     @NotBlank
+    @Size(max = 64)
     private String lastName;
     @NotBlank
     private String email;
@@ -44,7 +46,7 @@ public class User implements Serializable {
     private String password;
     private Date dateOfBirth;
     private String homeAddress;
-    //@Pattern(regexp = "\\d{3}-\\d{3}-\\d{4}")
+    @Size(max = 15) //UIT-T Standard, E.164 Format
     private Integer cellPhoneNumber;
     private Boolean status;
     //private boolean enabled;
@@ -60,12 +62,6 @@ public class User implements Serializable {
     private Instant updatedAt;
     //////////////
 
-    // old version
-//    @ManyToOne
-//    @JoinColumn(name = "role_id", referencedColumnName = "id")
-//    private Role role;
-
-    //new version
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

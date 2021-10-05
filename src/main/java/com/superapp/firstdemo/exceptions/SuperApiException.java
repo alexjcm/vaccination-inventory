@@ -1,6 +1,7 @@
 package com.superapp.firstdemo.exceptions;
 
 import org.springframework.http.HttpStatus;
+
 public class SuperApiException extends RuntimeException {
 
     private static final long serialVersionUID = -6593330219878485669L;

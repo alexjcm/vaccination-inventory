@@ -1,38 +1,27 @@
 package com.superapp.firstdemo.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.stereotype.Component;
 
+import static com.superapp.firstdemo.util.AppConstants.AUTHORITIES_CLAIM_NAME;
+import static com.superapp.firstdemo.util.AppConstants.AUTH_WHITELIST;
+
+
 /**
- *
+ * Enable JWT authentication
  */
 @Component
-//@Configuration // ADD
-//@EnableWebSecurity//ADD
-//@EnableGlobalMethodSecurity(prePostEnabled = true) //ADD
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private static final String[] AUTH_WHITELIST = {
-            // Public endpoints
-            "/error",
-            "/api/authenticate",
-            // -- Swagger UI v2
-            "/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            // -- Swagger UI v3 (OpenAPI)
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-    };
 
     /**
      * Anyone can view the Swagger documentation, but calling a secure endpoint will require pressing
@@ -56,8 +45,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                 .anyRequest()
                                 .authenticated()
                 )
-                .exceptionHandling().disable()
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+                // JWT Validation Configuration
+                .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(authenticationConverter());
+    }
+
+    /**
+     * Our goal is to map user roles into granted authorities.
+     * JwtGrantedAuthoritiesConverter expects a JWT claim named scope or scp containing either
+     * a space separated list or array of granted authorities.
+     * Furthermore, it will add a prefix, SCOPE_ to every granted authority.
+     * We need to change this behavior by creating a new instance of JwtAuthenticationConverter.
+     *
+     * @return
+     */
+    protected JwtAuthenticationConverter authenticationConverter() {
+        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        authoritiesConverter.setAuthorityPrefix("");
+        authoritiesConverter.setAuthoritiesClaimName(AUTHORITIES_CLAIM_NAME);
+
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+        return converter;
     }
 
     /**

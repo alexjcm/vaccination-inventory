@@ -1,41 +1,49 @@
 package com.superapp.firstdemo.rest;
 
-import com.superapp.firstdemo.dao.VaccineDao;
-import com.superapp.firstdemo.model.Vaccine;
+import java.util.List;
+import java.util.Optional;
+
+import com.superapp.firstdemo.service.VaccineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.superapp.firstdemo.model.Vaccine;
 
 @RestController
 public class VaccineRestController implements VaccineRest {
 
     @Autowired
-    private VaccineDao vaccineDao;
+    private VaccineService vaccineService;
 
     @Override
     public ResponseEntity<List<Vaccine>> getAllVaccines() {
-        return ResponseEntity.ok(vaccineDao.getAllVaccines());
+        return ResponseEntity.ok(vaccineService.getAllVaccines());
     }
 
     @Override
-    public ResponseEntity<Vaccine> getVaccineById(Integer id) {
-        return ResponseEntity.ok(vaccineDao.getVaccineById(id));
+    public ResponseEntity<Optional<Vaccine>> getVaccineById(Integer id) {
+        return ResponseEntity.ok(vaccineService.getVaccineById(id));
     }
 
     @Override
-    public ResponseEntity<Boolean> addVaccine(Vaccine vaccine) {
-        return ResponseEntity.ok(vaccineDao.addVaccine(vaccine));
+    public ResponseEntity<Vaccine> addVaccine(Vaccine vaccine) {
+        try {
+            Vaccine vaccineSaved = vaccineService.addVaccine(vaccine);
+            return ResponseEntity.ok(vaccineSaved);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @Override
-    public ResponseEntity<Boolean> deleteUser(Integer id) {
-        return ResponseEntity.ok(vaccineDao.deleteVaccine(id));
+    public ResponseEntity<Vaccine> updateVaccine(Vaccine vaccine) {
+        return ResponseEntity.ok(vaccineService.updateVaccine(vaccine));
     }
 
     @Override
-    public ResponseEntity<Boolean> updateUser(Vaccine vaccine) {
-        return ResponseEntity.ok(vaccineDao.updateVaccine(vaccine));
+    public ResponseEntity<Boolean> deleteVaccine(Integer id) {
+        return ResponseEntity.ok(vaccineService.deleteVaccine(id));
     }
 }

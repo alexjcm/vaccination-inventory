@@ -17,7 +17,7 @@ import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Data
-@NoArgsConstructor
+//@NoArgsConstructor
 @Table(name = "roles")
 public class Role implements Serializable {
 
@@ -31,7 +31,7 @@ public class Role implements Serializable {
     @Column(name = "name")
     private RoleName name;
 
-    public Role(RoleName name) {
+   /* public Role(RoleName name) {
         this.name = name;
-    }
+    }*/
 }

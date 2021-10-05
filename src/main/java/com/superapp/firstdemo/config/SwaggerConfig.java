@@ -17,6 +17,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 
+import static com.superapp.firstdemo.util.AppConstants.AUTHORIZATION_HEADER;
+
 /**
  * Swagger V3 Configuration
  *
@@ -24,8 +26,6 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
  */
 @Configuration
 public class SwaggerConfig {
-
-    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     @Bean
     public Docket api() {

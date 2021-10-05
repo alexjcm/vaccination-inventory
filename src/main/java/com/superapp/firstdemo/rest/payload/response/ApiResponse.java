@@ -1,4 +1,4 @@
-package com.superapp.firstdemo.rest.payload;
+package com.superapp.firstdemo.rest.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

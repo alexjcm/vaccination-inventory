@@ -1,4 +1,4 @@
-package com.superapp.firstdemo.rest.payload;
+package com.superapp.firstdemo.rest.payload.response;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -15,7 +15,7 @@ public class JwtResponse {
 
     @NonNull
     private String token;
-  //  private String issuedAt;
+    //  private String issuedAt;
     @NonNull
     private String tokenType;
 }

@@ -15,11 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import static com.superapp.firstdemo.util.AppConstants.AUTHORITIES_CLAIM_NAME;
+
 import com.superapp.firstdemo.security.JwtHelper;
-import com.superapp.firstdemo.rest.payload.JwtResponse;
+import com.superapp.firstdemo.rest.payload.response.JwtResponse;
 
 /**
- * The auth controller to handle login requests
+ * The auth controller to handle login requests.
  * The Auth API interface is implemented by a Spring @RestController.
  *
  * @author
@@ -45,8 +47,7 @@ public class AuthenticationRestController implements AuthenticationRest {
         try {
             userDetails = userDetailsService.loadUserByUsername(username);
         } catch (UsernameNotFoundException e) {
-            logger.info("===> User not found");
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User: " + username + " not found");
         }
 
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
@@ -55,12 +56,12 @@ public class AuthenticationRestController implements AuthenticationRest {
                     .collect(Collectors.joining(" "));
             Map<String, String> claims = new HashMap<>();
             claims.put("username", username);
-            claims.put("authorities", authorities);
-            //claims.put("userId", "1");
+            claims.put(AUTHORITIES_CLAIM_NAME, authorities);
+            //claims.put("userId", String.valueOf(1));
 
             String token = jwtHelper.createTokenJwt(username, claims);
             return new JwtResponse(token, "Bearer");
         }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User: " + username + " not authenticated");
     }
 }

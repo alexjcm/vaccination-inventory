@@ -1,17 +1,16 @@
 package com.superapp.firstdemo.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import com.superapp.firstdemo.model.Role;
-import com.superapp.firstdemo.rest.AuthenticationRestController;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.superapp.firstdemo.model.Role;
+import com.superapp.firstdemo.rest.AuthenticationRestController;
 import com.superapp.firstdemo.model.User;
 
 // tipo model
@@ -27,15 +26,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // UN SOLO ROL
-       /* List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
-        return authorities;*/
-        // MULTIPLES ROLES
-       /* List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority(role.getName().toString()));
-        }*/
         List<Role> roles = user.getRoles();
         List<GrantedAuthority> authorities = roles.stream().map(r -> {
             logger.info("r.getName().toString() ===> " + r.getName().toString());

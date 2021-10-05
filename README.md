@@ -11,6 +11,7 @@ Backend for keeping track of employee vaccination status inventory.
 
 
 - Spring Boot OAuth2 Resource Server with JWT
+- Role Based Access Control (RBAC) with Spring Boot and JWT
 - Swagger UI (Swagger-OpenAPI 3) with Authentication
 
 ## Installation
@@ -44,7 +45,7 @@ Execute shell command inside container to initialize some sample records in the 
 
 To test the application use the following administrator username and password:
 
-- username: april
+- username: tom@acme.com
 - password: 1234
 
 ## Data model

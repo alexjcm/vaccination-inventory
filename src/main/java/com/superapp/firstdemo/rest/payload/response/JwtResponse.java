@@ -15,7 +15,7 @@ public class JwtResponse {
 
     @NonNull
     private String token;
-    //  private String issuedAt;
+
     @NonNull
     private String tokenType;
 }

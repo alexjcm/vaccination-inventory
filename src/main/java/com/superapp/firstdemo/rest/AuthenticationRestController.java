@@ -26,7 +26,6 @@ import com.superapp.firstdemo.rest.payload.response.JwtResponse;
  *
  * @author
  */
-//@CrossOrigin(origins = {"${app.security.cors.origin}"})
 @RestController
 public class AuthenticationRestController implements AuthenticationRest {
 

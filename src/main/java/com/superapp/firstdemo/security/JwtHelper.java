@@ -38,7 +38,6 @@ public class JwtHelper {
 
     private static final Logger logger = Logger.getLogger(JwtHelper.class.getName());
 
-
     public String createTokenJwt(String subject, Map<String, String> claims) {
         JWTCreator.Builder jwtBuilder = JWT.create().withSubject(subject);
         // Add claims

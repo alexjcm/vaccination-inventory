@@ -61,7 +61,6 @@ public class ValidatorsUtil {
     }
 
     /**
-     *
      * @param sameNumber
      * @return
      */

@@ -29,7 +29,7 @@ public class VaccineService {
         return vaccineRepository.findByName(name);
     }
 
-    public <S extends Vaccine> S  addVaccine(S entity) {
+    public <S extends Vaccine> S addVaccine(S entity) {
         return vaccineRepository.save(entity);
     }
 

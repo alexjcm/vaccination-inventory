@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 import com.superapp.firstdemo.exceptions.ResourceNotFoundException;
@@ -14,7 +13,6 @@ import com.superapp.firstdemo.model.RoleName;
 import com.superapp.firstdemo.repository.RoleRepository;
 import com.superapp.firstdemo.repository.UserRepository;
 import com.superapp.firstdemo.rest.payload.request.UserRequest;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -197,7 +195,7 @@ public class UserService {
 
     public Boolean emailIsAvailable(String email) {
         Boolean isAvailable = userRepository.existsByEmail(email);
-        logger.info("Email isAvailable ===> " + isAvailable);
+        logger.info("Email is available? ===> " + isAvailable);
         return isAvailable;
     }
 }

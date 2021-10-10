@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import static com.superapp.firstdemo.util.AppConstants.AUTHORITIES_CLAIM_NAME;
 import static com.superapp.firstdemo.util.AppConstants.AUTH_WHITELIST;
 
-
 /**
  * Enable JWT authentication
  */

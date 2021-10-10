@@ -25,4 +25,5 @@ public class SuperappApplication {
         //We want to start application with another timezone then need to set timezone:
         TimeZone.setDefault(TimeZone.getTimeZone(CUSTOM_TIMEZONE));
     }
+
 }

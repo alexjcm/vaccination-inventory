@@ -14,6 +14,12 @@ Backend for keeping track of employee vaccination status inventory.
 - Role Based Access Control (RBAC) with Spring Boot and JWT
 - Swagger UI (Swagger-OpenAPI 3) with Authentication
 
+## Test
+
+- JUnit 5
+- MockMvc
+- Mockito
+
 ## Installation
 
 ### Build and run Postgres in a container

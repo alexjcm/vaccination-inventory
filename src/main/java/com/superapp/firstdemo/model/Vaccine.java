@@ -2,7 +2,9 @@ package com.superapp.firstdemo.model;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +15,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Data
+@AllArgsConstructor //ADD
 @Table(name = "vaccine")
 public class Vaccine  implements Serializable {
 
@@ -22,4 +25,8 @@ public class Vaccine  implements Serializable {
     @NotBlank
     private String name;
 
+    //ADD
+    public Vaccine() {
+
+    }
 }

@@ -11,4 +11,5 @@ public interface VaccineRepository extends JpaRepository<Vaccine, Integer> {
 
     @Query("FROM Vaccine WHERE name=:name")
     Vaccine findByName(@Param("name") String name);
+
 }

@@ -5,7 +5,18 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -46,7 +57,7 @@ public class User implements Serializable {
     private String password;
     private Date dateOfBirth;
     private String homeAddress;
-    @Size(max = 15) //UIT-T Standard, E.164 Format
+    //@Size(max = 15) //UIT-T Standard, E.164 Format
     private Integer cellPhoneNumber;
     private Boolean status;
     //private boolean enabled;

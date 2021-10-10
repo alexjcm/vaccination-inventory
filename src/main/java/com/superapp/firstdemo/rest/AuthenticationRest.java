@@ -1,6 +1,6 @@
 package com.superapp.firstdemo.rest;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,4 +19,5 @@ public interface AuthenticationRest {
     @Operation(summary = "Public endpoint which returns a signed JWT for valid user credentials")
     @PostMapping(value = "/authenticate", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     JwtResponse authenticate(@RequestParam String username, @RequestParam String password);
+
 }

@@ -31,7 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByUsername(@NotBlank String username);
 
-    Boolean existsByEmail(@NotBlank String email);
+    //@Query("FROM User WHERE email=:email")
+    Boolean existsByEmail(@Param("email") String email);
 
     @Query("FROM User WHERE vaccine_id=:id AND status=true")
     List<User> getUsersByVaccine(@Param("id") Integer id);
@@ -40,6 +41,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> getUsersByVaccineStatus(@Param("status") Boolean status);
 
     @Query("From User where date_of_vaccinated >= ?1 and date_of_vaccinated <= ?2 and status=true")
-    List<User> getUsersByDateRange(@Param("1") Date dateStart, @Param("2") Date dateEnd);
+        //@Query("From User WHERE date_of_vaccinated >=:date_start AND date_of_vaccinated <=:date_end AND status=true")
+    List<User> getUsersByDateRange(@Param("date_start") Date dateStart, @Param("date_end") Date dateEnd);
 
 }

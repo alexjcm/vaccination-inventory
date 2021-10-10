@@ -27,7 +27,7 @@ import com.superapp.firstdemo.model.Vaccine;
 public interface VaccineRest {
 
     @GetMapping
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     ResponseEntity<List<Vaccine>> getAllVaccines();
 
     @ApiOperation(value = "You get a vaccine according to your id")

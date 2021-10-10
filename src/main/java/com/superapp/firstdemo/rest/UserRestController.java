@@ -11,14 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-// @CrossOrigin(origins = {"${app.security.cors.origin}"})
 @RestController
 public class UserRestController implements UserRest {
 
@@ -47,10 +44,10 @@ public class UserRestController implements UserRest {
 
     @Override
     public ResponseEntity<User> registerUser(UserRequest userRequest) {
-        if (userService.emailIsAvailable(userRequest.getEmail())) {
+        if (!userService.emailIsAvailable(userRequest.getEmail())) {
             return ResponseEntity.ok(userService.registerUser(userRequest));
         }
-        throw new SuperApiException(HttpStatus.BAD_REQUEST, "Email is already taken");
+        throw new SuperApiException(HttpStatus.BAD_REQUEST, "Email: " + userRequest.getEmail() + " is already taken");
     }
 
     @Override

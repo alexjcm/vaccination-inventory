@@ -1,7 +1,6 @@
 package com.superapp.firstdemo.rest.payload.request;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

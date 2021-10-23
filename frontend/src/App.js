@@ -1,11 +1,11 @@
 import React, {Suspense} from 'react';
+
 import {Link, Route, Switch} from 'wouter';
-import Header from './components/Header';
+
 import Login from './pages/Login';
 import ErrorPage from './pages/ErrorPage';
-
+import Header from './components/Header';
 import {UserContextProvider} from './context/UserContext';
-
 import home from './home.jpg';
 import './App.css';
 

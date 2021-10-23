@@ -1,22 +1,23 @@
 import React, {useState} from 'react';
-import {useLocation} from 'wouter';
-import useUser from '../hooks/useUser';
 import {useEffect} from 'react';
-import {validateField} from '../utils/Validate';
-import './Login.css';
+
+import {useLocation} from 'wouter';
 import {InputText} from 'primereact/inputtext';
 import {Button} from 'primereact/button';
-//import {Message} from 'primereact/message';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 
+import useLogin from '../hooks/useLogin';
+import {validateField} from '../utils/Validate';
+import './Login.css';
+
 export default function Login({onLogin}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [, navigate] = useLocation();
-  const {isLoginLoading, hasLoginError, login, isLogged} = useUser();
+  const {isLoginLoading, hasLoginError, login, isLogged} = useLogin();
 
   useEffect(() => {
     if (isLogged) {
@@ -28,7 +29,7 @@ export default function Login({onLogin}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateField(username, password)) {
-      console.warn("Campos incompletos");
+      console.warn('Campos incompletos');
       return;
     }
     login({username, password});

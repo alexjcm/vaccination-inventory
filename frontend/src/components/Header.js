@@ -1,12 +1,12 @@
 import React from 'react';
+
 import {useRoute, Link} from 'wouter';
 
-import useUser from '../hooks/useUser';
-
+import useLogin from '../hooks/useLogin';
 import './Header.css';
 
 export default function Header() {
-  const {isLogged, logout} = useUser();
+  const {isLogged, logout} = useLogin();
   const [match] = useRoute('/login');
 
   const handleClick = (e) => {

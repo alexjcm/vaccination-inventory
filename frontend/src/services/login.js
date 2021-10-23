@@ -4,7 +4,6 @@ export default function login({username, password}) {
   const options = {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    //credentials: 'include',
     body: new URLSearchParams({
       username,
       password,

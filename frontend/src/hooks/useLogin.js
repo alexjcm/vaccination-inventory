@@ -1,8 +1,9 @@
 import {useCallback, useContext, useState} from 'react';
+
 import UserContext from '../context/UserContext';
 import loginService from '../services/login';
 
-export default function useUser() {
+export default function useLogin() {
   const {token, setToken} = useContext(UserContext);
   const [state, setState] = useState({loading: false, error: false});
 

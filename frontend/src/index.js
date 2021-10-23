@@ -2,10 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import reportWebVitals from './reportWebVitals';
-
 import {ThemeProvider} from '@emotion/react';
-import {theme} from './styles/styles';
 
+import {theme} from './styles/styles';
 import App from './App';
 import './index.css';
 

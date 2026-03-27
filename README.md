@@ -1,84 +1,66 @@
-# Employee vaccination inventory
+# Employee Vaccination Inventory
 
-Backend for keeping track of employee vaccination status inventory.
+A full-stack application for managing employee vaccination status, featuring a modernized Spring Boot 3 backend and a React 19 frontend, fully integrated with **Auth0 JWT Authentication**.
 
-## Prerequisites
+---
 
-- Java 8
-- Spring Boot 2.5.4
-- Postgres 11 running in a Docker container
-- Maven 3.6.3
+## 🛠️ Tech Stack & Architecture
 
+-   **Frontend**: React 19, Vite 6, PrimeReact, Auth0 SDK.
+-   **Backend**: Spring Boot 3.4.1 (Java 24), Gradle 8.14.4 (with Wrapper).
+-   **Database**: PostgreSQL 17.
+-   **Security**: Stateless OAuth2 Resource Server (Auth0).
+-   **Orchestration**: Docker Compose.
 
-- Spring Boot OAuth2 Resource Server with JWT
-- Role Based Access Control (RBAC) with Spring Boot and JWT
-- Swagger UI (Swagger-OpenAPI 3) with Authentication
+## 🚀 Quick Start with Docker
 
-## Test
+### 1. Environment Configuration
+Create or update your `.env` file in the root directory (or update `docker-compose.yml`) with your Auth0 credentials:
 
-- JUnit 5
-- MockMvc
-- Mockito
+```bash
+# Auth0 Backend Config
+AUTH0_ISSUER_URI=https://<your-tenant>.auth0.com/
+AUTH0_AUDIENCE=https://api.vaccination-inventory.com
 
-## Installation
+# Auth0 Frontend Config
+VITE_AUTH0_DOMAIN=<your-tenant>.auth0.com
+VITE_AUTH0_CLIENT_ID=<your-client-id>
+VITE_AUTH0_AUDIENCE=https://api.vaccination-inventory.com
 
-### Build and run Postgres in a container
+# App Config
+ALLOWED_ORIGINS=http://localhost:5173
+```
 
-Build image and run container with Docker Compose:
+### 2. Start the Application
+The entire ecosystem (Frontend, Backend, and Database) is orchestrated using Docker Compose.
 
-`docker-compose up --build -d`
+```bash
+docker-compose up --build
+```
 
-Stop and remove networks and containers for services defined in the Compose file.
+### 3. Access the Services
+- **Frontend UI**: http://localhost:5173
+- **API Endpoint**: http://localhost:8080/api
+- **Swagger API**: http://localhost:8080/swagger-ui/index.html
 
-`docker-compose down -v --remove-orphans`
+---
 
-*Then, compile and run the application.*
+## 💾 Database Management
 
-### Execute shell command inside container
+The database automatically initializes with structural schema. Personal vaccination data is synchronized from Auth0 identities via the `/api/me` endpoint.
 
-Execute shell command inside container to initialize some sample records in the database:
+### Manual Data Initialization
+To manually reload sample records into the running container:
+```bash
+docker exec -it dev-postgres psql -U user_test -d db_test -a -f sample.sql
+```
 
-`docker exec -it dev-postgres bash`
+---
 
-`psql -U user_test -d db_test -a -f sample.sql`
+## 📄 Documentation & Metadata
+- **Metadata Endpoint**: `http://localhost:8080/v3/api-docs`
+- **Identity Sync**: Upon login, the system automatically synchronizes Auth0 profiles to the local PostgreSQL database.
 
-### Run application
-
-- Use `mvn clean install` in the project root directory to build the project.
-- Run the main class, `com.suprerapp.firstdemo.SuperappApplication` to start the application.
-
-## Test the application
-
-To test the application use the following administrator username and password:
-
-- username: tom@acme.com
-- password: 1234
-
-## Data model
-
-![DataModel](https://i.postimg.cc/23Nz386M/Data-model.jpg)
-
-## Swagger Paths
-
-- Swagger UI endpoint: http://localhost:8080/swagger-ui/index.html
-- All Swagger Resources(groups): http://localhost:8080/swagger-resources
-- Metadata endpoint: http://localhost:8080/v3/api-docs
-
-
-
-## More resources about Spring Boot
-
-### Reference Documentation
-
-For further reference, please consider the following sections:
-
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.5.4/maven-plugin/reference/html/)
-* [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/2.5.4/reference/htmlsingle/#using-boot-devtools)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.5.4/reference/htmlsingle/#boot-features-developing-web-applications)
-
-### Guides
-
-The following guides illustrate how to use some features concretely:
-
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
+## TODO
+- [ ] Implement RBAC (Role-Based Access Control) using Auth0 custom claims.
+- [ ] Add unit and integration tests for the new JWT synchronization flow.

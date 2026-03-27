@@ -1,18 +1,48 @@
 .gf-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(24, 6, 31, 0.8);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(153, 51, 255, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.App-logo {
+  height: 32px;
+  width: 32px;
+  cursor: pointer;
+}
+
+.header-user-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.user-email {
+  color: #f3f3f3;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
 .gf-header a {
-  color: #fff;
-  font-size: 16px;
+  color: #00ccff;
+  font-size: 15px;
   font-weight: 600;
+  transition: color 0.2s;
 }
 
 .gf-header a:hover {
-  text-decoration: underline;
-}
-
-.gf-header a + a {
-  margin: 0 12px;
+  color: #00ff99;
+  text-decoration: none;
 }

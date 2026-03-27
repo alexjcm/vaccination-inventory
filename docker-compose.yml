@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  db:
+    build: ./database
+    container_name: dev-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - DB_NAME_SIGNATURE=db_test
+      - DB_USER_SIGNATURE=user_test
+      - DB_PASS_SIGNATURE=pass_test
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build: 
+      context: ./backend
+    container_name: dev-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/db_test
+      - SPRING_DATASOURCE_USERNAME=user_test
+      - SPRING_DATASOURCE_PASSWORD=pass_test
+      - AUTH0_ISSUER_URI=https://dev-mz3wmzwe2532icvg.us.auth0.com/
+      - AUTH0_AUDIENCE=https://api.vaccination-inventory.com
+      - ALLOWED_ORIGINS=http://localhost:5173
+    depends_on:
+      - db
+
+  frontend:
+    build: 
+      context: ./frontend
+    container_name: dev-frontend
+    restart: always
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  db-data:

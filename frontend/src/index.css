@@ -52,11 +52,88 @@ ul {
   padding: 0;
 }
 
-/* -------------------- rf-layout  - Component / header */
 .o-header {
   background-color: inherit;
   position: sticky;
   top: 0;
   z-index: var(--zIndex-header);
   max-height: var(--search-size-mx-h);
+}
+
+.App-logo {
+  width: 60px;
+  height: 60px;
+}
+
+.App-main {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 1rem 0;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.inventory-card {
+  padding: 1.5rem;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.inventory-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--brand-color_2);
+}
+
+.inventory-card h3 {
+  margin-top: 0;
+  color: var(--brand-color_2);
+  font-size: 1.4rem;
+}
+
+.inventory-card p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.price-tag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--brand-color_6);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.error-alert {
+  background: rgba(255, 82, 82, 0.1);
+  border: 1px solid #ff5252;
+  color: #ff5252;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem;
+  opacity: 0.5;
+  font-style: italic;
 }

@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: vaccination-api
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH0_ISSUER_URI:https://dev-mz3wmzwe2532icvg.us.auth0.com/}
+          audiences: ${AUTH0_AUDIENCE:https://api.vaccination-inventory.com}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://db:5432/db_test}
+    username: ${SPRING_DATASOURCE_USERNAME:user_test}
+    password: ${SPRING_DATASOURCE_PASSWORD:pass_test}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+security:
+  cors:
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:5173}
+
+logging:
+  level:
+    org.springframework.security: INFO

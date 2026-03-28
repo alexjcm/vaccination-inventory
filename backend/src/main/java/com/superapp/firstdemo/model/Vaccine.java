@@ -24,6 +24,8 @@ public class Vaccine  implements Serializable {
     private Integer id;
     @NotBlank
     private String name;
+    
+    private String type;
 
     //ADD
     public Vaccine() {

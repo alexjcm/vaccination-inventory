@@ -89,10 +89,12 @@ export const Auth0UserProvider = ({ children }: { children: ReactNode }) => {
     <Auth0Provider
       domain={domain}
       clientId={clientId}
+      useRefreshTokens={true}
+      cacheLocation="localstorage"
       authorizationParams={{
         redirect_uri: window.location.origin,
         audience: audience,
-        scope: "openid profile email"
+        scope: "openid profile email offline_access"
       }}
     >
       <Auth0Bridge>{children}</Auth0Bridge>

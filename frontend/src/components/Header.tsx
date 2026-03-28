@@ -1,46 +1,53 @@
-import React, {MouseEvent} from 'react';
-import {useRoute, Link} from 'wouter';
-
-import useUser from '../hooks/useUser';
+import React, {useContext} from 'react';
+import {Link} from 'wouter';
+import Context from '../context/UserContext';
 
 import './Header.css';
 
-import home from '../home.jpg';
+const CORPORATE_LOGO = "https://cdn-icons-png.flaticon.com/512/2859/2859706.png";
 
 export default function Header() {
-  const {isLogged, logout, user} = useUser();
-  const [match] = useRoute('/login');
+  const { authService } = useContext(Context);
+  const isLogged = authService?.isAuthenticated() ?? false;
 
-  const handleClick = (e: MouseEvent) => {
+  const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
-    logout();
+    authService?.logout();
   };
 
-  const renderLoginButtons = ({isLogged, user}: {isLogged: boolean, user?: any}) => {
-    return isLogged ? (
-      <div className="header-user-info">
-        {user?.email && <span className="user-email">{user.email}</span>}
-        <Link href="#" onClick={handleClick}>
-          Logout
-        </Link>
-      </div>
-    ) : (
-      <div className="header-nav">
-        <Link href="/login">Login</Link>
-      </div>
-    );
+  const handleLogin = (e: React.MouseEvent) => {
+    e.preventDefault();
+    authService?.login();
   };
-
-  const content = match ? null : renderLoginButtons({isLogged, user});
 
   return (
-    <header className="gf-header">
-      <div className="header-left">
-        <Link href="/">
-          <img className="App-logo" alt="Home logo" src={home} />
-        </Link>
+    <header className="corporate-header">
+      <div className="corporate-container header-inner">
+        <div className="header-left">
+          <Link href="/">
+            <div className="brand-wrapper">
+              <img src={CORPORATE_LOGO} alt="MediStock" className="brand-logo" />
+              <span className="brand-name font-brand font-bold text-navy">MediStock V.I.M.</span>
+            </div>
+          </Link>
+        </div>
+        
+        <div className="header-right">
+          {isLogged ? (
+            <div className="user-profile">
+              <button onClick={handleLogout} className="btn-corporate-outline btn-sm">
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="auth-actions">
+              <button onClick={handleLogin} className="btn-corporate-primary btn-sm">
+                Login to System
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-      {content}
     </header>
   );
 }

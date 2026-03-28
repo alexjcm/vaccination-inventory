@@ -1,48 +1,53 @@
-.gf-header {
+.corporate-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--theme-border);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+}
+
+.header-inner {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background: rgba(24, 6, 31, 0.8);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(153, 51, 255, 0.2);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  width: 100%;
 }
 
-.header-left {
+.brand-wrapper {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-}
-
-.App-logo {
-  height: 32px;
-  width: 32px;
+  gap: 1rem;
   cursor: pointer;
 }
 
-.header-user-info {
+.brand-logo {
+  height: 32px;
+  width: 32px;
+}
+
+.brand-name {
+  font-family: var(--font-brand);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-navy);
+  letter-spacing: -0.02em;
+}
+
+.header-right {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
 }
 
-.user-email {
-  color: #f3f3f3;
-  font-size: 14px;
-  opacity: 0.8;
+.btn-sm {
+  padding: 0.5rem 1.25rem !important;
+  font-size: 0.85rem !important;
 }
 
-.gf-header a {
-  color: #00ccff;
-  font-size: 15px;
-  font-weight: 600;
-  transition: color 0.2s;
-}
-
-.gf-header a:hover {
-  color: #00ff99;
-  text-decoration: none;
+@media (max-width: 768px) {
+  .brand-name {
+    display: none; /* Only show logo on mobile */
+  }
 }
